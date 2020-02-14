@@ -6,3 +6,7 @@ const pagination = (page, pageSize) => {
         limit
     }
 }
+
+module.exports = {
+    pagination
+}

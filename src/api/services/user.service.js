@@ -34,6 +34,29 @@ const signInUser = async(req) => {
     }
 }
 
+const getAllUsers = async(req) => {
+
+}
+
+const getUserById = async(req) => {
+
+}
+
+const deleteUserById = async(req) => {
+
+}
+
+const updateUserById = async(req) => {
+
+}
+
+
+
 module.exports = {
-    signUpUser
+    signUpUser,
+    signInUser,
+    getAllUsers,
+    getUserById,
+    deleteUserById,
+    updateUserById
 }

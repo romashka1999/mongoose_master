@@ -6,14 +6,14 @@ class BaseResponseBuilder {
     }
 }
 
-class SuccessBuilder extends BaseResponseBuilder {
+class SuccessResponseBuilder extends BaseResponseBuilder {
 
     constructor(data, action) {
         super(data, action);
     }
 }
 
-class ErrorBuilder extends BaseResponseBuilder {
+class ErrorResponseBuilder extends BaseResponseBuilder {
      
     constructor(data, action, type) {
         super(data, action);
@@ -22,6 +22,6 @@ class ErrorBuilder extends BaseResponseBuilder {
 }
 
 module.exports = {
-    SuccessBuilder,
-    ErrorBuilder
+    SuccessResponseBuilder,
+    ErrorResponseBuilder
 }

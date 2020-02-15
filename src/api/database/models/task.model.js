@@ -19,4 +19,9 @@ const TaskSchema = new Schema({
 });
 
 
+TaskSchema.path('title').validate( function(value) {
+    return value.toUpperCase();
+});
+
+
 module.exports = model('Task', TaskSchema);

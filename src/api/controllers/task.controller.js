@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = new Router();
 const { getAllTasks, getAllTasksByUserId, getTaskById, updateTaskById, deleteTaskById, createTask } = require('../services/task.service');
-const { requestHandler } = require('../shared/responseBuilder');
+const { requestHandler } = require('../shared/requestHandler');
 
 router.get('/', (req, res, next) => {
     requestHandler(req, res, getAllTasks);

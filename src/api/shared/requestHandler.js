@@ -1,5 +1,5 @@
 
-const requestHandler = (res, callback) => {
+const requestHandler = async (res, callback) => {
     try {
         const response =  await callback(req);
         const statusCode = getStatusCodeWithAction(response.action);

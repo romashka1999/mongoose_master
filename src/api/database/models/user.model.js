@@ -1,4 +1,4 @@
-const { Schema, Model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const { isEmail } = require('validator');
 
 const UserSchema = new Schema({
@@ -34,6 +34,15 @@ const UserSchema = new Schema({
     }
 });
 
+UserSchema.statics.findByCredentials =  async (acountIdentity, password) => {
+    // const 
+    // try {
+    //     const user = awa
+    // } catch (error) {
+    //     throw new ErrorBuilder(error, 'SERVER_INTERNAL_ERROR', 'DB_ERROR');
+    // }
+}
 
 
-module.exports = Model('User', UserSchema);
+
+module.exports = model('User', UserSchema);

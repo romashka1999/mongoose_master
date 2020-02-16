@@ -13,10 +13,12 @@ const signUpUser = async(req) => {
 
 const signInUser = async(req) => {
     try {
-        const response = await User.create(body);
-        return new SuccessBuilder(response, 'CREATED');
+        const user = await User.findByCredentials(req.accountIdentity, req.password);
+        const token = await user.generateAuthToken();
+        user.token = token;
+        return new SuccessBuilder(user, 'CREATED');
     } catch (error) {
-        throw new ErrorBuilder(error, 'SERVER_INTERNAL_ERROR', 'DB_ERROR');
+        throw new ErrorBuilder(error, 'BAD_REQUEST', 'DB_ERROR');
     }
 }
 
@@ -25,7 +27,21 @@ const getAllUsers = async(req) => {
 }
 
 const getUserById = async(req) => {
-
+    const id = req.params.id;
+    try {
+        const response = await User.findById(id);
+        if(response) {
+            return new SuccessResponseBuilder(response, 'OK');
+        } else {
+            throw new ErrorResponseBuilder({}, 'NOT_FOUND', 'DB_ERROR');
+        }
+    } catch (error) {
+        if(error instanceof ErrorResponseBuilder) {
+            throw error;
+        } else {
+            throw new ErrorResponseBuilder(error, 'BAD_REQUEST', 'DB_ERROR');
+        }
+    }
 }
 
 const deleteUserById = async(req) => {

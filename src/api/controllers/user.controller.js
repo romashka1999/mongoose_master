@@ -2,8 +2,9 @@ const { Router } = require('express');
 const router = new Router();
 const { signUpUser, signInUser, getAllUsers, getUserById, deleteUserById, updateUserById } = require('../services/user.service');
 const { requestHandler } = require('../shared/requestHandler');
+const { auth } = require('../middlewares/auth');
 
-router.get('/', async (req, res, next) => {
+router.get('/', auth, async (req, res, next) => {
     requestHandler(req, res, getAllUsers);
 });
 

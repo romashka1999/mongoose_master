@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 const { isEmail } = require('validator');
+const { hashPassword, checkPassword } = require('../../helpers/password');
+const { generateToken } = require('../../helpers/token');
 
 const UserSchema = new Schema({
     firstName: {
@@ -61,18 +63,53 @@ const UserSchema = new Schema({
         type: String,
         enum: ['VERIFIED', 'VERIFICATION_PENDING', 'UNVERIFIED'],
         default: 'UNVERIFIED'
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 });
 
-UserSchema.statics.findByCredentials =  async (acountIdentity, password) => {
-    // const 
-    // try {
-    //     const user = awa
-    // } catch (error) {
-    //     throw new ErrorBuilder(error, 'SERVER_INTERNAL_ERROR', 'DB_ERROR');
-    // }
+// Schema.methods.?  ---  instance methods
+// Schema.statics.?  ---  Class methods
+// Schema.pre  ---  before method
+// Schema.post  ---  after method
+
+UserSchema.methods.generateAuthToken = async function() {
+    const user = this;
+    const token = await generateToken(user);
+    return token;
 }
 
+UserSchema.statics.findByCredentials =  async (acountIdentity, password) => {
+    try {
+        const user = await User.findOne({email: acountIdentity});
+        if (!user) {
+            const user = await User.findOne({username: acountIdentity});
+            if(!user) {
+                throw new ErrorBuilder({}, 'NOT_FOUND', 'DB_ERROR');
+            }
+
+            if(! await checkPassword(password, user.password)) {
+                throw new ErrorBuilder({}, 'UNAUTHORIZED', 'AUTH_MIDDLEWARE');
+            }
+            return user;
+        }
+    } catch (error) {
+        throw new ErrorBuilder(error, 'SERVER_INTERNAL_ERROR', 'DB_ERROR');
+    }
+}
+
+//hash pass before saving
+UserSchema.pre('save', async function (next) {
+    const user = this;
+    if(user.isModified('password')) {
+        user.password = await hashPassword(user.password);
+    }
+    next();
+});
 
 
-module.exports = model('User', UserSchema);
+
+const User = model('User', UserSchema);
+module.exports = User;

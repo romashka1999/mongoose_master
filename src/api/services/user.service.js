@@ -23,7 +23,12 @@ const signInUser = async(req) => {
 }
 
 const getAllUsers = async(req) => {
-
+    try {
+        const response = await User.find();
+        return new SuccessBuilder(response, 'OK');
+    } catch (error) {
+        throw new ErrorResponseBuilder({}, 'NOT_FOUND', 'DB_ERROR');
+    }
 }
 
 const getUserById = async(req) => {
@@ -45,7 +50,12 @@ const getUserById = async(req) => {
 }
 
 const deleteUserById = async(req) => {
-
+    try {
+        const response = await User.deleteOne();
+        return new SuccessBuilder(response, 'OK');
+    } catch (error) {
+        throw new ErrorResponseBuilder({}, 'NOT_FOUND', 'DB_ERROR');
+    }
 }
 
 const updateUserById = async(req) => {
